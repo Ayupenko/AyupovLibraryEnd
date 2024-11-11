@@ -143,23 +143,32 @@ namespace AyupovLibrary
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             var currentLibrary=(sender as Button).DataContext as FundLibrary;
-            if(MessageBox.Show("Вы точно хотите выполнить удаление?","Внимание!", MessageBoxButton.YesNo,MessageBoxImage.Question)
-                ==MessageBoxResult.Yes)
+            var currentLibraryRefill=LibraryEntities.GetContext().ReffilFund.ToList();
+            currentLibraryRefill= currentLibraryRefill.Where(P=>P.FundID ==currentLibrary.FundID).ToList();
+            if (currentLibraryRefill.Count != 0)
+                MessageBox.Show("Невозможно выполнить удаление, так как существует пополнения у данного фонда","Ошибка!");
+            else
             {
-                try
+                if (MessageBox.Show("Вы точно хотите выполнить удаление?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Question)
+               == MessageBoxResult.Yes)
                 {
-                    LibraryEntities.GetContext().FundLibrary.Remove(currentLibrary);
-                    LibraryEntities.GetContext().SaveChanges();
+                    try
+                    {
+                        LibraryEntities.GetContext().FundLibrary.Remove(currentLibrary);
+                        LibraryEntities.GetContext().SaveChanges();
 
-                    LibraryListView.ItemsSource = LibraryEntities.GetContext().FundLibrary.ToList();
+                        LibraryListView.ItemsSource = LibraryEntities.GetContext().FundLibrary.ToList();
 
-                    UpdateLibrary();
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show(ex.Message.ToString());
+                        UpdateLibrary();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message.ToString());
+                    }
                 }
             }
+            
+           
         }
     }
 }
