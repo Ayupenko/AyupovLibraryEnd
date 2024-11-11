@@ -1,0 +1,102 @@
+﻿<Page x:Class="AyupovLibrary.LibraryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AyupovLibrary"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="LibraryPage" FontFamily="Comic Sans MS" IsVisibleChanged="Page_IsVisibleChanged">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <TextBlock Text="Введите название для поиска" TextAlignment="Right"
+                           Width="300" FontSize="15" ></TextBlock>
+                <TextBox Name="TBoxSearch" TextChanged="TBoxSearch_TextChanged" Width="300" FontSize="15"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Выберите количество" TextAlignment="Right" Width="300" FontSize="20"></TextBlock>
+                <ComboBox Name="ComboType" SelectionChanged="ComboType_SelectionChanged" FontSize="15" Width="200">
+                    <TextBlock>Все</TextBlock>
+                    <TextBlock>от 0 до 10 книг</TextBlock>
+                    <TextBlock>от 10 до 20 книг</TextBlock>
+                    <TextBlock>от 20 до 30 книг</TextBlock>
+                    <TextBlock>30 и более книг</TextBlock>
+                </ComboBox>
+            </StackPanel>
+        </WrapPanel>
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="5">
+            <RadioButton Content="От А до Я" GroupName="Sort" Width="300" FontSize="20" Name="RButtonUP" Checked="RButtonUP_Checked"></RadioButton>
+            <RadioButton Content="От Я до А" GroupName="Sort" Width="300" FontSize="20" Name="RButtonDown" Checked="RButtonDown_Checked"></RadioButton>
+        </StackPanel>
+        <Button Content="Добавить" Name="AddButton" Click="AddButton_Click" HorizontalAlignment="left" VerticalAlignment="Bottom"></Button>
+        <ListView Name="LibraryListView"  Grid.Row="2">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Image Width="200" Grid.Column="0" Stretch="UniformToFill" HorizontalAlignment="Center"  Grid.RowSpan="5">
+                            <Image.Source>
+                                <Binding Path="MainImagePath">
+                                    <Binding.TargetNullValue>
+                                        <ImageSource>
+                                        resour/picture.png
+                                        </ImageSource>
+                                    </Binding.TargetNullValue>
+                                </Binding>
+                            </Image.Source>
+                        </Image>
+
+                        
+                        <TextBlock Text="{Binding FundName}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" FontSize="20" TextWrapping="Wrap" FontWeight="Bold"></TextBlock>
+                        <TextBlock Text="{Binding Libraries.NameLibrary}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" FontSize="20" TextWrapping="Wrap"></TextBlock>
+
+                        <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                            <TextBlock Text="{Binding QuanBooks, StringFormat=Книги: {0:0}}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" FontSize="20" ></TextBlock>
+                            <TextBlock Text=" | " FontSize="20" />
+                            <TextBlock Text="{Binding QuanJournals, StringFormat=Журналы: {0:0}}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" FontSize="20" ></TextBlock>
+                            <TextBlock Text=" | " FontSize="20" />
+                            <TextBlock Text="{Binding QuanNewspapers, StringFormat=Газеты: {0:0}}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" FontSize="20" ></TextBlock>
+                            <TextBlock Text=" | " FontSize="20" />
+                            <TextBlock Text="{Binding QuanCollections, StringFormat=Коллекционные: {0:0}}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" FontSize="20" ></TextBlock>
+                            
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                            <TextBlock Text="{Binding QuanDissertations, StringFormat=Диссертации: {0:0}}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" FontSize="20" ></TextBlock>
+                            <TextBlock Text=" | " FontSize="20" />
+                            <TextBlock Text="{Binding QuanReferats, StringFormat=Рефераты: {0:0}}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" FontSize="20" ></TextBlock>
+                        </StackPanel>
+                        <StackPanel Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Orientation="Horizontal">
+                            <Button Name="EditButton" Content="Редактировать" Margin="2" Click="EditButton_Click"></Button>
+                            <Button Name="DeleteButton" Content="Удалить" Click="DeleteButton_Click" Margin="2"></Button>
+                        </StackPanel>
+                    </Grid>
+                    
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="50 10 10 10 " HorizontalAlignment="Right">
+            <TextBlock Name="currentLibraryCount" FontSize="20"/>
+            <TextBlock Text=" из " FontSize="20"/>
+            <TextBlock Name="allLibraryCount" FontSize="20"/>
+        </StackPanel>
+    </Grid>
+</Page>

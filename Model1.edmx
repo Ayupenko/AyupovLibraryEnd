@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище LibraryModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="FundLibrary">
+          <Key>
+            <PropertyRef Name="FundID" />
+          </Key>
+          <Property Name="FundID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FundName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="LibraryID" Type="int" Nullable="false" />
+          <Property Name="QuanBooks" Type="int" Nullable="false" />
+          <Property Name="QuanJournals" Type="int" />
+          <Property Name="QuanNewspapers" Type="int" />
+          <Property Name="QuanCollections" Type="int" />
+          <Property Name="QuanDissertations" Type="int" />
+          <Property Name="QuanReferats" Type="int" />
+          <Property Name="MainImagePath" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Libraries">
+          <Key>
+            <PropertyRef Name="LibraryID" />
+          </Key>
+          <Property Name="LibraryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NameLibrary" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Adress" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ReffilFund">
+          <Key>
+            <PropertyRef Name="ReffilFundID" />
+          </Key>
+          <Property Name="ReffilFundID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FundID" Type="int" Nullable="false" />
+          <Property Name="StaffID" Type="int" Nullable="false" />
+          <Property Name="Data" Type="date" Nullable="false" />
+          <Property Name="NameSource" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="TypeLitID" Type="int" Nullable="false" />
+          <Property Name="Publisher" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="DataPublisher" Type="date" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="StaffID" />
+          </Key>
+          <Property Name="StaffID" Type="int" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Patronomic" Type="nvarchar" MaxLength="250" />
+          <Property Name="LibraryID" Type="int" Nullable="false" />
+          <Property Name="Post" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Birthday" Type="date" Nullable="false" />
+          <Property Name="DataEmployment" Type="date" Nullable="false" />
+          <Property Name="Education" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Salary" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TypeLiteratures">
+          <Key>
+            <PropertyRef Name="TypeLitID" />
+          </Key>
+          <Property Name="TypeLitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Пополнение фонда_Сотрудники">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="ReffilFund" Type="Self.ReffilFund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="ReffilFund">
+              <PropertyRef Name="StaffID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Пополнение фонда_Тип литературы">
+          <End Role="TypeLiteratures" Type="Self.TypeLiteratures" Multiplicity="1" />
+          <End Role="ReffilFund" Type="Self.ReffilFund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeLiteratures">
+              <PropertyRef Name="TypeLitID" />
+            </Principal>
+            <Dependent Role="ReffilFund">
+              <PropertyRef Name="TypeLitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Пополнение фонда_Фонд библиотеки">
+          <End Role="FundLibrary" Type="Self.FundLibrary" Multiplicity="1" />
+          <End Role="ReffilFund" Type="Self.ReffilFund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FundLibrary">
+              <PropertyRef Name="FundID" />
+            </Principal>
+            <Dependent Role="ReffilFund">
+              <PropertyRef Name="FundID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Сотрудники_Библиотеки1">
+          <End Role="Libraries" Type="Self.Libraries" Multiplicity="1" />
+          <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Libraries">
+              <PropertyRef Name="LibraryID" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="LibraryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Фонд библиотеки_Библиотеки1">
+          <End Role="Libraries" Type="Self.Libraries" Multiplicity="1" />
+          <End Role="FundLibrary" Type="Self.FundLibrary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Libraries">
+              <PropertyRef Name="LibraryID" />
+            </Principal>
+            <Dependent Role="FundLibrary">
+              <PropertyRef Name="LibraryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище LibraryModelContainer">
+          <EntitySet Name="FundLibrary" EntityType="Self.FundLibrary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Libraries" EntityType="Self.Libraries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReffilFund" EntityType="Self.ReffilFund" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypeLiteratures" EntityType="Self.TypeLiteratures" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Пополнение фонда_Сотрудники" Association="Self.FK_Пополнение фонда_Сотрудники">
+            <End Role="Staff" EntitySet="Staff" />
+            <End Role="ReffilFund" EntitySet="ReffilFund" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Пополнение фонда_Тип литературы" Association="Self.FK_Пополнение фонда_Тип литературы">
+            <End Role="TypeLiteratures" EntitySet="TypeLiteratures" />
+            <End Role="ReffilFund" EntitySet="ReffilFund" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Пополнение фонда_Фонд библиотеки" Association="Self.FK_Пополнение фонда_Фонд библиотеки">
+            <End Role="FundLibrary" EntitySet="FundLibrary" />
+            <End Role="ReffilFund" EntitySet="ReffilFund" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Сотрудники_Библиотеки1" Association="Self.FK_Сотрудники_Библиотеки1">
+            <End Role="Libraries" EntitySet="Libraries" />
+            <End Role="Staff" EntitySet="Staff" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Фонд библиотеки_Библиотеки1" Association="Self.FK_Фонд библиотеки_Библиотеки1">
+            <End Role="Libraries" EntitySet="Libraries" />
+            <End Role="FundLibrary" EntitySet="FundLibrary" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LibraryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="FundLibrary">
+          <Key>
+            <PropertyRef Name="FundID" />
+          </Key>
+          <Property Name="FundID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FundName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LibraryID" Type="Int32" Nullable="false" />
+          <Property Name="QuanBooks" Type="Int32" Nullable="false" />
+          <Property Name="QuanJournals" Type="Int32" Nullable="false" />
+          <Property Name="QuanNewspapers" Type="Int32" Nullable="false" />
+          <Property Name="QuanCollections" Type="Int32" Nullable="false" />
+          <Property Name="QuanDissertations" Type="Int32" Nullable="false" />
+          <Property Name="QuanReferats" Type="Int32" Nullable="false" />
+          <Property Name="MainImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ReffilFund" Relationship="Self.FK_Пополнение_фонда_Фонд_библиотеки" FromRole="FundLibrary" ToRole="ReffilFund" />
+          <NavigationProperty Name="Libraries" Relationship="Self.FK_Фонд_библиотеки_Библиотеки1" FromRole="FundLibrary" ToRole="Libraries" />
+        </EntityType>
+        <EntityType Name="Libraries">
+          <Key>
+            <PropertyRef Name="LibraryID" />
+          </Key>
+          <Property Name="LibraryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameLibrary" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Adress" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="FundLibrary" Relationship="Self.FK_Фонд_библиотеки_Библиотеки1" FromRole="Libraries" ToRole="FundLibrary" />
+          <NavigationProperty Name="Staff" Relationship="Self.FK_Сотрудники_Библиотеки1" FromRole="Libraries" ToRole="Staff" />
+        </EntityType>
+        <EntityType Name="ReffilFund">
+          <Key>
+            <PropertyRef Name="ReffilFundID" />
+          </Key>
+          <Property Name="ReffilFundID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FundID" Type="Int32" Nullable="false" />
+          <Property Name="StaffID" Type="Int32" Nullable="false" />
+          <Property Name="Data" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NameSource" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TypeLitID" Type="Int32" Nullable="false" />
+          <Property Name="Publisher" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DataPublisher" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="FundLibrary" Relationship="Self.FK_Пополнение_фонда_Фонд_библиотеки" FromRole="ReffilFund" ToRole="FundLibrary" />
+          <NavigationProperty Name="Staff" Relationship="Self.FK_Пополнение_фонда_Сотрудники" FromRole="ReffilFund" ToRole="Staff" />
+          <NavigationProperty Name="TypeLiteratures" Relationship="Self.FK_Пополнение_фонда_Тип_литературы" FromRole="ReffilFund" ToRole="TypeLiteratures" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="StaffID" />
+          </Key>
+          <Property Name="StaffID" Type="Int32" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Patronomic" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="LibraryID" Type="Int32" Nullable="false" />
+          <Property Name="Post" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DataEmployment" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Education" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Salary" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Libraries" Relationship="Self.FK_Сотрудники_Библиотеки1" FromRole="Staff" ToRole="Libraries" />
+          <NavigationProperty Name="ReffilFund" Relationship="Self.FK_Пополнение_фонда_Сотрудники" FromRole="Staff" ToRole="ReffilFund" />
+        </EntityType>
+        <EntityType Name="TypeLiteratures">
+          <Key>
+            <PropertyRef Name="TypeLitID" />
+          </Key>
+          <Property Name="TypeLitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ReffilFund" Relationship="Self.FK_Пополнение_фонда_Тип_литературы" FromRole="TypeLiteratures" ToRole="ReffilFund" />
+        </EntityType>
+        <Association Name="FK_Пополнение_фонда_Фонд_библиотеки">
+          <End Role="FundLibrary" Type="Self.FundLibrary" Multiplicity="1" />
+          <End Role="ReffilFund" Type="Self.ReffilFund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FundLibrary">
+              <PropertyRef Name="FundID" />
+            </Principal>
+            <Dependent Role="ReffilFund">
+              <PropertyRef Name="FundID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Фонд_библиотеки_Библиотеки1">
+          <End Role="Libraries" Type="Self.Libraries" Multiplicity="1" />
+          <End Role="FundLibrary" Type="Self.FundLibrary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Libraries">
+              <PropertyRef Name="LibraryID" />
+            </Principal>
+            <Dependent Role="FundLibrary">
+              <PropertyRef Name="LibraryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Сотрудники_Библиотеки1">
+          <End Role="Libraries" Type="Self.Libraries" Multiplicity="1" />
+          <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Libraries">
+              <PropertyRef Name="LibraryID" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="LibraryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Пополнение_фонда_Сотрудники">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="ReffilFund" Type="Self.ReffilFund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="ReffilFund">
+              <PropertyRef Name="StaffID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Пополнение_фонда_Тип_литературы">
+          <End Role="TypeLiteratures" Type="Self.TypeLiteratures" Multiplicity="1" />
+          <End Role="ReffilFund" Type="Self.ReffilFund" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeLiteratures">
+              <PropertyRef Name="TypeLitID" />
+            </Principal>
+            <Dependent Role="ReffilFund">
+              <PropertyRef Name="TypeLitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LibraryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="FundLibrary" EntityType="Self.FundLibrary" />
+          <EntitySet Name="Libraries" EntityType="Self.Libraries" />
+          <EntitySet Name="ReffilFund" EntityType="Self.ReffilFund" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" />
+          <EntitySet Name="TypeLiteratures" EntityType="Self.TypeLiteratures" />
+          <AssociationSet Name="FK_Пополнение_фонда_Фонд_библиотеки" Association="Self.FK_Пополнение_фонда_Фонд_библиотеки">
+            <End Role="FundLibrary" EntitySet="FundLibrary" />
+            <End Role="ReffilFund" EntitySet="ReffilFund" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Фонд_библиотеки_Библиотеки1" Association="Self.FK_Фонд_библиотеки_Библиотеки1">
+            <End Role="Libraries" EntitySet="Libraries" />
+            <End Role="FundLibrary" EntitySet="FundLibrary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Сотрудники_Библиотеки1" Association="Self.FK_Сотрудники_Библиотеки1">
+            <End Role="Libraries" EntitySet="Libraries" />
+            <End Role="Staff" EntitySet="Staff" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Пополнение_фонда_Сотрудники" Association="Self.FK_Пополнение_фонда_Сотрудники">
+            <End Role="Staff" EntitySet="Staff" />
+            <End Role="ReffilFund" EntitySet="ReffilFund" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Пополнение_фонда_Тип_литературы" Association="Self.FK_Пополнение_фонда_Тип_литературы">
+            <End Role="TypeLiteratures" EntitySet="TypeLiteratures" />
+            <End Role="ReffilFund" EntitySet="ReffilFund" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище LibraryModelContainer" CdmEntityContainer="LibraryEntities">
+          <EntitySetMapping Name="FundLibrary">
+            <EntityTypeMapping TypeName="LibraryModel.FundLibrary">
+              <MappingFragment StoreEntitySet="FundLibrary">
+                <ScalarProperty Name="FundID" ColumnName="FundID" />
+                <ScalarProperty Name="FundName" ColumnName="FundName" />
+                <ScalarProperty Name="LibraryID" ColumnName="LibraryID" />
+                <ScalarProperty Name="QuanBooks" ColumnName="QuanBooks" />
+                <ScalarProperty Name="QuanJournals" ColumnName="QuanJournals" />
+                <ScalarProperty Name="QuanNewspapers" ColumnName="QuanNewspapers" />
+                <ScalarProperty Name="QuanCollections" ColumnName="QuanCollections" />
+                <ScalarProperty Name="QuanDissertations" ColumnName="QuanDissertations" />
+                <ScalarProperty Name="QuanReferats" ColumnName="QuanReferats" />
+                <ScalarProperty Name="MainImagePath" ColumnName="MainImagePath" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Libraries">
+            <EntityTypeMapping TypeName="LibraryModel.Libraries">
+              <MappingFragment StoreEntitySet="Libraries">
+                <ScalarProperty Name="LibraryID" ColumnName="LibraryID" />
+                <ScalarProperty Name="NameLibrary" ColumnName="NameLibrary" />
+                <ScalarProperty Name="Adress" ColumnName="Adress" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReffilFund">
+            <EntityTypeMapping TypeName="LibraryModel.ReffilFund">
+              <MappingFragment StoreEntitySet="ReffilFund">
+                <ScalarProperty Name="ReffilFundID" ColumnName="ReffilFundID" />
+                <ScalarProperty Name="FundID" ColumnName="FundID" />
+                <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="NameSource" ColumnName="NameSource" />
+                <ScalarProperty Name="TypeLitID" ColumnName="TypeLitID" />
+                <ScalarProperty Name="Publisher" ColumnName="Publisher" />
+                <ScalarProperty Name="DataPublisher" ColumnName="DataPublisher" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Staff">
+            <EntityTypeMapping TypeName="LibraryModel.Staff">
+              <MappingFragment StoreEntitySet="Staff">
+                <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Patronomic" ColumnName="Patronomic" />
+                <ScalarProperty Name="LibraryID" ColumnName="LibraryID" />
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="DataEmployment" ColumnName="DataEmployment" />
+                <ScalarProperty Name="Education" ColumnName="Education" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypeLiteratures">
+            <EntityTypeMapping TypeName="LibraryModel.TypeLiteratures">
+              <MappingFragment StoreEntitySet="TypeLiteratures">
+                <ScalarProperty Name="TypeLitID" ColumnName="TypeLitID" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
