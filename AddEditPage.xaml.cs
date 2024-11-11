@@ -61,27 +61,27 @@ namespace AyupovLibrary
                 errors.AppendLine("Укажите название фонда");
             }
           
-            if (_currentLibrary.QuanBooks <= 0 || _currentLibrary.QuanBooks.GetType() != typeof(int))
+            if (_currentLibrary.QuanBooks <= 0 )
             {
                 errors.AppendLine("Укажите количество книг");
             }
-            if (_currentLibrary.QuanJournals <= 0 || _currentLibrary.QuanJournals.GetType() != typeof(int))
+            if (_currentLibrary.QuanJournals <= 0)
             {
                 errors.AppendLine("Укажите количество журналов");
             }
-            if (_currentLibrary.QuanNewspapers <= 0 || _currentLibrary.QuanNewspapers.GetType() != typeof(int))
+            if (_currentLibrary.QuanNewspapers <= 0)
             {
                 errors.AppendLine("Укажите количество газет");
             }
-            if (_currentLibrary.QuanDissertations <= 0 || _currentLibrary.QuanDissertations.GetType() != typeof(int))
+            if (_currentLibrary.QuanDissertations <= 0 )
             {
                 errors.AppendLine("Укажите количество диссертаций");
             }
-            if (_currentLibrary.QuanReferats <= 0 || _currentLibrary.QuanReferats.GetType() != typeof(int))
+            if (_currentLibrary.QuanReferats <= 0)
             {
                 errors.AppendLine("Укажите количество рефератов");
             }
-            if (_currentLibrary.QuanCollections <= 0 || _currentLibrary.QuanCollections.GetType() != typeof(int))
+            if (_currentLibrary.QuanCollections <= 0)
             {
                 errors.AppendLine("Укажите количество Коллекционных");
             }
